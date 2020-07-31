@@ -21,23 +21,21 @@ def initialize_responses():
     return redirect('/questions/0')
 
 
-@app.route('/questions/<int:idx>')
-def show_question(idx):
+@app.route('/questions/<int:qid>')
+def show_question(qid):
     """Shows question from the survey"""
 
     if len(session['responses']) >= len(survey.questions):
         # User has answered all questions; thank them.
         return redirect('/thank-you')
 
-    if idx == len(session['responses']):
-        # 
-        question = survey.questions[idx].question
-        choices = survey.questions[idx].choices
-        return render_template('question.html', survey=survey, question=question, choices=choices, idx=idx)
-    else:
+    if qid != len(session["responses"]):
+        # User trying to access questions out of order
         flash("You are trying to access an invalid question.", "error")
         return redirect(f'/questions/{len(session["responses"])}')
 
+    question = survey.questions[qid].question
+    choices = survey.questions[qid].choices
 
 @app.route('/answer', methods=['POST'])
 def add_answer():
