@@ -21,6 +21,13 @@ def home_page():
     return render_template('home.html', survey=survey)
 
 
+@app.route('/initialize-responses', methods=["POST"])
+def initialize_responses():
+    """Initialize list of responses to be an empty list"""
+    session["responses"] = []
+    return redirect('/questions/0')
+
+
 @app.route('/questions/<int:idx>')
 def show_question(idx):
     """Shows question from the survey"""
